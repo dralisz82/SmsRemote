@@ -57,17 +57,25 @@ public class MainActivity extends AppCompatActivity {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED)
             permissionsToRequest.add(Manifest.permission.CALL_PHONE);
         if(request && permissionsToRequest.size() > 0) {
-            final int REQUEST_CODE=1;
-            ActivityCompat.requestPermissions(this, permissionsToRequest.toArray(new String[0]), REQUEST_CODE);
-
-            if((ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)||
-               (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED)||
-               (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)||
-               (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED))
-                return false;
-            return true;
+            if(shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)||
+                    shouldShowRequestPermissionRationale(Manifest.permission.RECEIVE_SMS)||
+                    shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS)||
+                    shouldShowRequestPermissionRationale(Manifest.permission.CALL_PHONE))
+                AppInfo.showPermissionsRationale(this, permissionsToRequest);
         }
         return (permissionsToRequest.size() == 0);
+    }
+
+    public boolean requestPerms(List<String> permissionsToRequest) {
+        final int REQUEST_CODE=1;
+        ActivityCompat.requestPermissions(this, permissionsToRequest.toArray(new String[0]), REQUEST_CODE);
+
+        if((ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)||
+                (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED)||
+                (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)||
+                (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED))
+            return false;
+        return true;
     }
 
     @Override
